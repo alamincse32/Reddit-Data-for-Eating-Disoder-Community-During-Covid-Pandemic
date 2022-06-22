@@ -56,30 +56,35 @@ def get_date_range(s_time, e_time):
 
 def get_weekly_interval(s_time, e_time):
     weekly_interval_date = []
-    s_time = dt.datetime.fromtimestamp(s_time, timezone.utc).date()
-    e_time = dt.datetime.fromtimestamp(e_time, timezone.utc).date()
+    s_time = dt.datetime.fromtimestamp(s_time).date()
+    e_time = dt.datetime.fromtimestamp(e_time).date()
     start_date = dt.datetime(s_time.year, s_time.month, s_time.day)
     end_date = dt.datetime(e_time.year, e_time.month, e_time.day)
 
     next_date = start_date
     while next_date <= end_date:
         next_date = start_date + dt.timedelta(days=6)
+        days = (end_date - start_date).days + 1
+        print(days)
+        if days < 7:
+            weekly_interval_date.append([start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")])
+            return weekly_interval_date
         weekly_interval_date.append([start_date.strftime("%Y-%m-%d"), next_date.strftime("%Y-%m-%d")])
         start_date = next_date + dt.timedelta(days=1)
     return weekly_interval_date
 
 
-def count_submission_datewise(submission_file):
+def count_submission_datewise(submission_file, s_time, e_time):
     submission_count = []
     date_ranges = []
     try:
         df_submission = pd.read_csv(submission_file)
         utc_times = sorted(df_submission['created_utc'].tolist(), reverse=False)
-        start_time = utc_times[0]
-        end_time = utc_times[-1]
+        start_time = s_time
+        end_time = e_time
         daily_post_count = {}
         for utc_time in utc_times:
-            d = dt.datetime.fromtimestamp(utc_time, timezone.utc).strftime("%Y-%m-%d")
+            d = dt.datetime.fromtimestamp(utc_time).strftime("%Y-%m-%d")
             if d not in daily_post_count.keys():
                 daily_post_count[d] = 1
             else:
@@ -91,7 +96,7 @@ def count_submission_datewise(submission_file):
             week.append(0)
 
         for utc_time in utc_times:
-            d = dt.datetime.fromtimestamp(utc_time, timezone.utc).strftime("%Y-%m-%d")
+            d = dt.datetime.fromtimestamp(utc_time).strftime("%Y-%m-%d")
             for week in weekly_date_interval:
                 if week[0] <= d <= week[1]:
                     week[2] += 1
@@ -102,7 +107,7 @@ def count_submission_datewise(submission_file):
             date_range.append(0)
 
         for utc_time in utc_times:
-            date_time = dt.datetime.fromtimestamp(utc_time, timezone.utc).date().strftime("%Y-%m-%d")
+            date_time = dt.datetime.fromtimestamp(utc_time).date().strftime("%Y-%m-%d")
             for date_range in date_ranges:
                 if date_range[0] <= date_time <= date_range[1]:
                     date_range[2] += 1
@@ -112,7 +117,7 @@ def count_submission_datewise(submission_file):
     return submission_count
 
 
-def count_comment_datewise(comment_file):
+def count_comment_datewise(comment_file, s_time, e_time):
     comment_count = []
     comment_date_count = []
     utc_time_list = []
@@ -127,13 +132,12 @@ def count_comment_datewise(comment_file):
                 for j in range(int(row_length)):
                     utc_time = df_comment.iloc[i][str(3 + 4 * j)]
                     utc_time_list.append(utc_time)
-        print(utc_time_list)
         utc_time_list = sorted(utc_time_list, reverse=False)
-        start_time = utc_time_list[0]
-        end_time = utc_time_list[-1]
+        start_time = s_time
+        end_time = e_time
         daily_comment_count = {}
         for utc_time in utc_time_list:
-            d = dt.datetime.fromtimestamp(utc_time, timezone.utc).strftime("%Y-%m-%d")
+            d = dt.datetime.fromtimestamp(utc_time).strftime("%Y-%m-%d")
             if d not in daily_comment_count.keys():
                 daily_comment_count[d] = 1
             else:
@@ -144,7 +148,7 @@ def count_comment_datewise(comment_file):
             week.append(0)
 
         for utc_time in utc_time_list:
-            d = dt.datetime.fromtimestamp(utc_time, timezone.utc).strftime("%Y-%m-%d")
+            d = dt.datetime.fromtimestamp(utc_time).strftime("%Y-%m-%d")
             for week in weekly_date_interval:
                 if week[0] <= d <= week[1]:
                     week[2] += 1
@@ -153,7 +157,7 @@ def count_comment_datewise(comment_file):
         for date_range in comment_date_count:
             date_range.append(0)
         for utc_time in utc_time_list:
-            date_time = dt.datetime.fromtimestamp(utc_time, timezone.utc).date().strftime("%Y-%m-%d")
+            date_time = dt.datetime.fromtimestamp(utc_time).date().strftime("%Y-%m-%d")
             for date_range in comment_date_count:
                 if date_range[0] <= date_time <= date_range[1]:
                     date_range[2] += 1
@@ -167,7 +171,16 @@ def count_comment_datewise(comment_file):
 if __name__ == '__main__':
     submission_file_path = config.SUBMISSION_DIRECTORY
     comment_file_path = config.COMMENT_DIRECTORY
-    submission = count_submission_datewise(submission_file_path)
+    strt_time_year = config.START_TIME_YEAR
+    strt_time_month = config.START_TIME_MONTH
+    strt_time_day = config.START_TIME_DAY
+    end_time_year = config.END_TIME_YEAR
+    end_time_month = config.END_TIME_MONTH
+    end_time_day = config.END_TIME_DAY
+    s_time = int(dt.datetime(int(strt_time_year), int(strt_time_month), int(strt_time_day)).timestamp())
+    e_time = int(dt.datetime(int(end_time_year), int(end_time_month), int(end_time_day), 23, 59, 59).timestamp())
+    print(s_time, e_time)
+    submission = count_submission_datewise(submission_file_path, s_time, e_time)
 
     df_daily = pd.DataFrame(submission[0].items(), columns=['Date', 'Submission Count'])
     df_weekly = pd.DataFrame(submission[1], columns=['Start Date', 'End Date', 'Submission Count'])
@@ -181,7 +194,7 @@ if __name__ == '__main__':
 
     writer.save()
 
-    comment_count = count_comment_datewise(comment_file_path)
+    comment_count = count_comment_datewise(comment_file_path, s_time, e_time)
 
     df_daily = pd.DataFrame(comment_count[0].items(), columns=['Date', 'Comment Count'])
     df_weekly = pd.DataFrame(comment_count[1], columns=['Start Date', 'End Date', 'Comment Count'])
