@@ -36,6 +36,7 @@ After the first column, each four coulmns are the comment fields.
 - `Column 4` : utc time. The time when the comment is submitted to the reddit.
 - `Column 5` : normal time generated or converted from utc time.
 
+And later columns go in this serial.
 
 ## Usage
 This dataset can be used to analyse the impact of covid pandemic on eating disorder community. These data also contain information about mental health. So, researchs are allowed to use and ispect the data contains and extract insightful information.
