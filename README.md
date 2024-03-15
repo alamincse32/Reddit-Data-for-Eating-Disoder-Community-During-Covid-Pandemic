@@ -1,14 +1,14 @@
-# Eating Disorder Reddit Data (Pre and Post Covid Pandemic)
+# Eating Disorder Reddit Data (Pre and Mid Covid Pandemic)
 
 ## Introduction
 The dataset comprises Reddit data pertaining to eating disorders during the COVID-19 pandemic. We gathered information from three prominent subreddits focused on eating disorders, namely r/EatingDisorders, r/AnorexiaNervosa, and r/BingeEatingDisorder.
 
 ## Overview
-We have collected the dataset for a 4 years long duration for each of the subreddit. The two years(1st March 2018 to 29th Feb 2020) dataset before the covid pandemic declaration is considered as pre-pandemic data and two years(1st March 2020 to 28th Feb 2022) dataset after the covid pandemic declaration as post-pandemic data. The folder Pre_Pandemic_Data and Post_Pandemic_Data contain pre-pandemic and post-pandemic data respectively.
+We have collected the dataset for a 4 years long duration for each of the subreddit. The two years(1st March 2018 to 29th Feb 2020) dataset before the covid pandemic declaration is considered as pre-pandemic data and two years(1st March 2020 to 28th Feb 2022) dataset after the covid pandemic declaration as mid-pandemic data. The folder Pre_Pandemic_Data and Mid_Pandemic_Data contain pre-pandemic and mid-pandemic data respectively.
 
 ## Contents
 - `Pre_Pandemic_Data`: Contains dataset of three subreddits of pre-pandemic.
-- `Post_Pandemic_Data`:Contains dataset of three subreddits of post-pandemic.
+- `Mid_Pandemic_Data`:Contains dataset of three subreddits of mid-pandemic.
 - `README.md`: Description of the dataset.
 
 ## Format 
