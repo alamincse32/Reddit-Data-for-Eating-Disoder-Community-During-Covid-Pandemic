@@ -23,18 +23,16 @@ The submission file has the following fields:
 - `normal_time` : generated normal time from created_utc field.
 - `url` : url for the submission.
 - `comment_number` : number of comments of that submission.
-- `author` : author of that submission.
 
-For comment file, each file contains comment corresponds to the submission. We link the submission and comment with submission unique id. Each comment has 4 fields. These are:
+For comment file, each file contains comment corresponds to the submission. We link the submission and comment with submission unique id. Each comment has 3 fields. These are:
 
 - `id` : The first column is the submission unique id with which we link submission and comment.
   
-After the first column, each four coulmns are the comment fields.
+After the first column, each three coulmns are the comment fields.
 
-- `Column 2` : author id to see which author commenting to the submission.
-- `Column 3` : comment text.
-- `Column 4` : utc time. The time when the comment is submitted to the reddit.
-- `Column 5` : normal time generated or converted from utc time.
+- `Column 2` : comment text.
+- `Column 3` : utc time. The time when the comment is submitted to the reddit.
+- `Column 4` : normal time generated or converted from utc time.
 
 And later columns go in this serial.
 
